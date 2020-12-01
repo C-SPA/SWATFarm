@@ -1,7 +1,7 @@
 # SWATFarm
-## Current author list
+__Current author list__
 _Moges B. Wagena, Amy S. Collick, Douglas Liebe, Roja Kaveh Garna, Daniel R. Fuka, Darrell Bosch, Robin White, Zachary M. Easton_
-### Not Not Bold
+##
 SWAT Model * Farm Routines
 
 SWATFarm is an adaptation of SWAT (Soil and Water Assessment Tool) that uses dynamic nutrient fractions and daily manure production calculated by process-based animal subroutine. 
