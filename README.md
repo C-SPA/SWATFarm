@@ -8,5 +8,5 @@ To compile SWATFarm in windows user can use “Rtools” which is a R toolset an
 After installing development environment open command window or terminal, clone with git, gh, or GitHub Desktop.\
 git clone https://github.com/C-SPA/SWATFarm.git \
 cd SWATFarm/src \
-make debug32 # on MSWindows or:\
-make debug64 # on Linux/Mac OSX\
+make debug32 # on MSWindows or: \
+make debug64 # on Linux/Mac OSX \
