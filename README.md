@@ -1,6 +1,6 @@
 # SWATFarm
 __Current author list:__
-_Moges B. Wagena, Amy S. Collick, Douglas Liebe, Roja Kaveh Garna, Daniel R. Fuka, Darrell Bosch, Robin White, Zachary M. Easton_
+_Moges B. Wagena, Amy S. Collick, Douglas Liebe, Roja Kaveh Garna, Darrell Bosch, Robin White, Zachary M. Easton, Daniel R. Fuka_
 ##
 SWAT Model * Farm Routines
 
