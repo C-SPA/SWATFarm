@@ -308,7 +308,7 @@
       ! Calf Feeding
       calf_ME = 5.0 !calf ME of diet
       calf_CP = 16.0 !CP, %
-      fed_calf_P = 0.45 !P, % added phytate
+      fed_calf_P = 0.45 !P, % added P
 
       !Yearling Feed
       heifer_ME = 5.0 !yearling ME of diet
