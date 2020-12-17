@@ -296,7 +296,7 @@
       kMortality = 7.0 !rate of cows lost to disease, etc., %
       Breed = 1 !if Holsteins 1, else 0
       PKYD = 43.0 !peak milk yield, kg/d
-      !MW = 600.0 !mature weight in kg
+      MW = 600.0 !mature weight in kg
       kPreg = 40.0
       MilkFat = 3.5 !average MF% of herd
       MilkProtein = 3.5 !average Protein% of herd
@@ -390,59 +390,61 @@
          age_out = (nCalf )*(1/(365.0*2))
 		 born = (nHeifer_first_dry + nHeifer_second_dry + nHeifer_third_dry + nDry)/(60*0.5)
 		 nCalf = nCalf + born - age_out - calves_death - calves_cull
-
+                 iCalf = nCalf
+		 
 		!Defining 1st lactation heifer pools
          first_lact_death = (nHeifer_first_lact*kMortality)/365
          first_lact_cull = (nHeifer_first_lact*firstCull)/365
          first_age_out = (nHeifer_first_lact/305)
          nHeifer_first_lact = nHeifer_first_lact + age_out - first_age_out - first_lact_cull - first_lact_death
-		 
+         iHeifer_first_lact = nHeifer_first_lact
+	 
 		 !Defining 1st dry heifer pools
          first_dry_death = (nHeifer_first_dry*kMortality)/365
          first_dry_cull = (nHeifer_first_dry*firstCull)/365
          first_dry_age_out = (nHeifer_first_dry/60)
          nHeifer_first_dry = nHeifer_first_dry + first_age_out - first_dry_age_out - first_dry_cull - first_dry_death
-		 
+         iHeifer_first_dry = nHeifer_first_dry		 
 		 !Defining 2nd lactation heifer pools
          second_lact_death = (nHeifer_second_lact*kMortality)/365
          second_lact_cull = (nHeifer_second_lact*secondCull)/365
          second_age_out = (nHeifer_second_lact/305)
-		 nHeifer_second_lact = nHeifer_second_lact + first_dry_age_out - second_age_out -second_lact_death-second_lact_cull
-		 
+	 nHeifer_second_lact = nHeifer_second_lact + first_dry_age_out - second_age_out -second_lact_death-second_lact_cull
+         iHeifer_second_lact = nHeifer_second_lact		 
 		 
 		 !Defining 2nd dry heifer pools
 	     second_dry_death = (nHeifer_second_dry*kMortality)/365
          second_dry_cull = (nHeifer_second_dry*secondCull)/365
          second_dry_age_out = (nHeifer_second_dry/60)
          nHeifer_second_dry = nHeifer_second_dry + second_age_out - second_dry_age_out - second_dry_cull - second_dry_death
-
+         iHeifer_second_dry = nHeifer_second_dry
 		 !Defining 3rd lactation heifer pools
 		 third_lact_death = (nHeifer_third_lact*kMortality)/365
          third_lact_cull = (nHeifer_third_lact*thirdCull)/365
          third_age_out = (nHeifer_third_lact/305)
-		 nHeifer_third_lact = nHeifer_third_lact + second_dry_age_out - third_age_out -third_lact_death-third_lact_cull
-		 
-		 
-		 
+	 nHeifer_third_lact = nHeifer_third_lact + second_dry_age_out - third_age_out -third_lact_death-third_lact_cull
+	 iHeifer_third_lact = nHeifer_third_lact
+	 
+		 		 
 		 !Defining 3rd dry heifer pools
 		 third_dry_death = (nHeifer_third_dry*kMortality)/365
          third_dry_cull = (nHeifer_third_dry*thirdCull)/365
          third_dry_age_out = (nHeifer_third_dry/60)
          nHeifer_third_dry = nHeifer_third_dry + third_age_out - third_dry_age_out - third_dry_cull - third_dry_death
-		 
+	 iHeifer_third_dry = nHeifer_third_dry		 
 		 
 		 !Defining mature lactation heifer pools
 		 lact_death = (nLact*kMortality)/365
          lact_cull = (nLact*fourthCull)/365
          fourth_age_out = (nLact/305)
-		 nLact = nLact + third_dry_age_out - fourth_age_out -lact_death-lact_cull
-
+	 nLact = nLact + third_dry_age_out - fourth_age_out -lact_death-lact_cull
+         iLact = nLact
 		 !Defining mature dry heifer pools		 
 		 dry_death = (nDry*kMortality)/365
          dry_cull = (nDry*thirdCull)/365
          dry_age_out = (nDry/60)
          nDry = nDry + fourth_age_out - dry_age_out - dry_cull - dry_death
-
+         iDry = nDry
          nBarn = nHeifer_first_lact + nHeifer_second_lact + nHeifer_third_lact + nLact
 		 nPasture = nCalf + nHeifer_first_dry + nHeifer_second_dry + nHeifer_third_dry + nDry
          end if
