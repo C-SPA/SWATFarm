@@ -577,7 +577,7 @@
 !!    added for user input values of SWAT-FARM model 	  !FOR DAIRY
       read (103,*,iostat=eof) dairy   !! flag to create dairy.out  should be 1 if need to create file 
       if (eof < 0) exit	 
-	  read (103,*,iostat=eof) dairy_flag  !! flag for dairy manure  
+      read (103,*,iostat=eof) dairy_flag  !! flag for dairy manure  
       if (eof < 0) exit
       read (103,*,iostat=eof) iCalf   !! number of Calf
       if (eof < 0) exit	 
@@ -597,45 +597,33 @@
       if (eof < 0) exit
 	  read (103,*,iostat=eof) iDry  !! number of Dry
       if (eof < 0) exit
-	  read (103,*,iostat=eof) nCalf  !! number of Dry
+	  read (103,*,iostat=eof) calf_ME  !! calf ME of diet
       if (eof < 0) exit
-      read (103,*,iostat=eof) nHeifer_first_lact   !! number of Heifer_first_lact   
+      read (103,*,iostat=eof) calf_CP   !! CP, %   
       if (eof < 0) exit
-	  read (103,*,iostat=eof) nHeifer_first_dry   !! number of Heifer_first_dry    
+	  read (103,*,iostat=eof) fed_calf_P   !! P, %
       if (eof < 0) exit
-      read (103,*,iostat=eof) nHeifer_second_lact   !! number of Heifer_second_lact   
+          read (103,*,iostat=eof) heifer_ME   !! yearling ME of diet   
       if (eof < 0) exit
-	  read (103,*,iostat=eof) nHeifer_second_dry   !! number of Heifer_second_dry   
+	  read (103,*,iostat=eof) heifer_CP   !! CP   
       if (eof < 0) exit
-	  read (103,*,iostat=eof) nHeifer_third_lact  !! number of Heifer_third_lact   
+	  read (103,*,iostat=eof) fed_heifer_P  !! P   
       if (eof < 0) exit
-	  read (103,*,iostat=eof) nHeifer_third_dry   !! number of Heifer_third_dry  
+	  read (103,*,iostat=eof) lact_CP   !! CP  
       if (eof < 0) exit	
-	  read (103,*,iostat=eof) nLact   !! number of Lact
+	  read (103,*,iostat=eof) fed_lact_P   !! P
       if (eof < 0) exit
-	  read (103,*,iostat=eof) nDry  !! number of Dry
+	  read (103,*,iostat=eof) dry_CP  !! CP
       if (eof < 0) exit  
-	  read (103,*,iostat=eof) RH  !! Relative Humidity, %  
+	  read (103,*,iostat=eof) fed_dry_P  !! P, %  
       if (eof < 0) exit	
-	  read (103,*,iostat=eof) WS  !! wind speed 
+	  read (103,*,iostat=eof) WS  !! Average wind speed, kp 
       if (eof < 0) exit	
-	  read (103,*,iostat=eof) HRS  !! wind speed 
+	  read (103,*,iostat=eof) HRS  !! Hours perceived sunlight
       if (eof < 0) exit		  
 	  read (103,*,iostat=eof) Temp   !! Baren temperture 	  
       if (eof < 0) exit
-	  read (103,*,iostat=eof) calf_ME   !! calf metabolizable energy of feed, kcal/kg 	  
-      if (eof < 0) exit
-	  read (103,*,iostat=eof) calf_CP   !! calf feed crude protein, % 	  
-      if (eof < 0) exit
-	  read (103,*,iostat=eof) heifer_ME   !! Heifer metabolizable energy of feed, kcal/kg
-      if (eof < 0) exit
-	  read (103,*,iostat=eof) heifer_CP   !! heifer feed crude protein, % 	  
-      if (eof < 0) exit
-	  read (103,*,iostat=eof) lact_CP   !! lact feed crude protein, % 	  
-      if (eof < 0) exit	
-	  read (103,*,iostat=eof) dry_CP  !! dry feed crude protein, % 	  
-      if (eof < 0) exit	  
-	  read (103,*,iostat=eof) Pasture_area  !! the area of pasture, ha 	  
+	  read (103,*,iostat=eof) RHMD   !! Relative Humidity, %	  
       if (eof < 0) exit	  
       exit
 !!    Drainmod input variables - 01/2006
