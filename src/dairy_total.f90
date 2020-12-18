@@ -306,32 +306,32 @@
       ! Feed Characteristics
 
       ! Calf Feeding
-      calf_ME = 5.0 !calf ME of diet
-      calf_CP = 16.0 !CP, %
-      fed_calf_P = 0.45 !P, % added P
+      !calf_ME = 5.0 !calf ME of diet
+      !calf_CP = 16.0 !CP, %
+      !fed_calf_P = 0.45 !P, % added P
 
       !Yearling Feed
-      heifer_ME = 5.0 !yearling ME of diet
-      heifer_CP = 17.0 !CP, %
-      fed_heifer_P = 0.45 !P, %
+      !heifer_ME = 5.0 !yearling ME of diet
+      !heifer_CP = 17.0 !CP, %
+      !fed_heifer_P = 0.45 !P, %
 
       !Lactating Cow Feed
-      lact_CP = 17.0 !CP, %
-      fed_lact_P = 0.45 ! P, %
+      !lact_CP = 17.0 !CP, %
+      !fed_lact_P = 0.45 ! P, %
 
       !Dry Cow Diet
-      dry_CP = 17.0 !CP, %
-      fed_dry_P = 0.45 ! P, %
+      !dry_CP = 17.0 !CP, %
+      !fed_dry_P = 0.45 ! P, %
 
 
       !###########################################
       ! Environmental Conditions
-      HRS = 12.0 !Hours perceived sunlight
+      !HRS = 12.0 !Hours perceived sunlight
 
       ! Perceived Temeprature
-      Temp = 24.0 !Indoor temp, C
-      RHMD = 75.0 !Relative Humidity, %
-      WS = 1.0 !Average wind speed, kph
+      !Temp = 24.0 !Indoor temp, C
+      !RHMD = 75.0 !Relative Humidity, %
+      !WS = 1.0 !Average wind speed, kph
 
 
 
