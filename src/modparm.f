@@ -947,8 +947,9 @@
       real :: lact_CP
       real :: dry_CP
       real :: HRS
-	  real :: Temp	  
+      real :: Temp	  
       real :: WS
+      real :: RHMD
 	  real :: manureStore
 	  real :: manure_barn
 	  real :: Norg_barn
@@ -1034,7 +1035,8 @@
       real :: fed_calf_P
       real :: fed_heifer_P
       real :: fed_dry_P	  
-       
+      real :: fed_lact_P
+      
       !real, dimension (:), allocatable :: Man_hru
 	  !real, dimension (:,:), allocatable :: manureStore
 !! add additional varibles for output
