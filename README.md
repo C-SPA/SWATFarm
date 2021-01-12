@@ -5,7 +5,7 @@ _Roja Kaveh Garna, Moges B. Wagena, Joshua Faulkner, Amy S. Collick, Robin White
 SWAT Model * Farm Routines
 
 SWATFarm is an adaptation of SWAT (Soil and Water Assessment Tool) that uses dynamic nutrient fractions and daily manure production calculated by process-based animal subroutine. 
-SWATFarm enhances the understanding of the impacs of livestock management on food production and watershed nutrient dynamics at different spatial and temporal resolutions. SWATFarm allows animal nutrition to be altered based on economic and environmental benefits. As a result, the new model as an integrated agroecosystem model can be used to optimize crop and livestock management practices to mitigate the effect of climate change, maximize food output, and minimize environmental impacts.
+SWATFarm enhances the understanding of the impacts of livestock management on food production and watershed nutrient dynamics at different spatial and temporal resolutions. SWATFarm allows animal nutrition to be altered based on economic and environmental benefits. As a result, the new model as an integrated agroecosystem model can be used to optimize crop and livestock management practices to mitigate the effect of climate change, maximize food output, and minimize environmental impacts.
 
 To compile SWATFarm in windows, the user can use __Rtools__ which is a R toolset and combines files from Cygwin, MinGW, and MSYS. Here is the link to download Rtools: https://cran.r-project.org/bin/windows/Rtools/
 
