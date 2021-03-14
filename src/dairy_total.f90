@@ -3,7 +3,7 @@
 
 
 !     ~ ~ ~ PURPOSE ~ ~ ~
-!     this subroutine computes the lake hydrologic pesticide balance.
+!     this subroutine computes the nutrients produced by dairy cows in the farm.
 !     ~ ~ ~ INCOMING VARIABLES ~ ~ ~
 !     variable          |definition
 !     ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -17,6 +17,8 @@
 !     nHeifer_third_dry | number of third lactation dry      
 !     nLact             | number of fourth lactation or greater, cows
 !     nDry              | cow number fourth lactation or greater, dry cows
+!     nBarn             | total number of animals in the barn
+!     nPasture          | total number of animal in the pasture 
 !     calf_ME           | calf metabolizable energy of feed, kcal/kg       
 !     calf_CP           | calf feed crude protein, %
 !     heifer_ME         | heifer ME of feed, kcal/kg
@@ -35,19 +37,32 @@
 !     MilkProtein       | milk protein, %
 !     FCM               | fat corrected milk
 !     Temp              | temperature, C       
-!     RHMD                | Relative Humidity, %
+!     RHMD              | Relative Humidity, %
 !     WS                | wind speed, kph
-!    Pasture_area       | the area of pasture, ha 
+!     HRS               | Hours perceived sunlight
 !     ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 
 !     ~ ~ ~ OUTGOING VARIABLES ~ ~ ~
 !     variable                | definition
 !     ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-!     Nmin                    | mineralized Nitrogen in manure, g
-!     Norg                    | organic Nitrogen in manure, g 
-!     Pmin                    | mineralized Phosphorus in manure, g
-!     Porg                    | organic Phosphorus in manure, g
+!     TotalNP_barn            | total nitrogen and phosphorus in manure in the barn, Kg
+!     total_N_barn            | total nitrogen in manure in the barn, Kg
+!     total_P_barn            | total phosphuros in manure in the barn, Kg
+!     total_N_Past            | total nitrogen in manure in the pasture, Kg
+!     total_P_Past            | total phosphorus in manure in the pasture, Kg
+!     Norg_barn               | organic nitrogen in manure in the barn, Kg
+!     Nmin_barn               | mineralized nitrogen in manure in the barn, Kg
+!     Porg_barn               | organic phosphuros in manure in the barn, Kg
+!     Pmin_barn               | mineralized phosphuros in manure in the barn, Kg 
+!     Norg_past               | organic nitrogen in maure in the pasture, Kg 
+!     Nmin_past               | mineralized nitrogen in manure in the pasture, Kg 
+!     Porg_past               | organic phosphorus in manure in the pasture, Kg 
+!     Pmin_past               | mineralized phosphorus in manure in the pasture, Kg 
+!     Pmin_frac               | fraction of mineralized phosphorus
+!     Porg_frac               | fraction of organic phosphuros
+!     Norg_frac               | fraction of organic nitrogen 
+!     Nmin_frac               | fraction of mineralized nitrogen 
 !     ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 !     ~ ~ ~ LOCAL DEFINITIONS ~ ~ ~
@@ -230,16 +245,8 @@
 	  !real :: manureStore_per_hac
 	 
 	  ! manure update
-
-	  real :: CornDigest
-	  real :: AlfalfaDigest
-	  real :: PatureDigest
 	  real :: nBarn
 	  real :: nPasture
-	  real :: Intake
-	  real :: IntakeP
-	  real :: DIGIntake
-	  real :: DIGIntakeP
 	  !real :: manure_barn
 	  !real :: manure_past
 	  !real :: manureStore
@@ -259,8 +266,6 @@
 	  !real :: PorgP_frac
 	  !real :: Pmin_frac
 	  !real :: PminP_frac
-	  !real :: cumManure
-	  !real :: cumManureP
       !real :: Total_N_barn_stored
       !real :: Total_P_barn_stored
       !real :: Total_N_past_deposited
@@ -282,7 +287,9 @@
       !real :: Nmin_deopsited_past
       !real :: Norg_deposited_past
       !!
-      ! Set starting animal numbers
+      !###############################################
+      ! Set Starting value for animal characteristics
+      !###############################################
       lact_target = 100
       kHeiferCull = 0.22
       born = 0
@@ -296,7 +303,7 @@
       kMortality = 7.0 !rate of cows lost to disease, etc., %
       Breed = 1 !if Holsteins 1, else 0
       PKYD = 43.0 !peak milk yield, kg/d
-      MW = 600.0 !mature weight in kg
+      !MW = 600.0 !mature weight in kg
       kPreg = 40.0
       MilkFat = 3.5 !average MF% of herd
       MilkProtein = 3.5 !average Protein% of herd
@@ -304,11 +311,11 @@
 
       !###########################################
       ! Feed Characteristics
-
+      !###########################################
       ! Calf Feeding
       !calf_ME = 5.0 !calf ME of diet
       !calf_CP = 16.0 !CP, %
-      !fed_calf_P = 0.45 !P, % added P
+      !fed_calf_P = 0.45 !P, % added phytate
 
       !Yearling Feed
       !heifer_ME = 5.0 !yearling ME of diet
@@ -326,6 +333,7 @@
 
       !###########################################
       ! Environmental Conditions
+      !###########################################
       !HRS = 12.0 !Hours perceived sunlight
 
       ! Perceived Temeprature
@@ -347,9 +355,6 @@
       Milk = 0
       N = 0
       P = 0
-	  CornDigest = 0.75118
-	  AlfalfaDigest = 0.88376
-	  PatureDigest = 0.81812
 	  wtCalf = 0
       wtHeifer_first_lact = 0
       wtHeifer_second_lact = 0
@@ -359,17 +364,8 @@
       WTHTD = 0
       wtLact = 0
       wtDry = 0
-	  !nCalf = iCalf
-	  !nHeifer_first_lact = iHeifer_first_lact
-	  !nHeifer_second_lact = iHeifer_second_lact
-	 ! nHeifer_third_lact = iHeifer_third_lact
-	  !nHeifer_first_dry = iHeifer_first_dry
-	  !nHeifer_second_dry = iHeifer_second_dry
-	 ! nHeifer_third_dry = iHeifer_third_dry
-	  !nDry = iDry
-	  !nLact = iLact
       born = (lact_target*0.5)/365
-	  !do   i = 1, fDay
+	  
 	     if (i .eq. 1) then 
 		 !Initialize day 1 populations
 		 nCalf = iCalf
@@ -390,27 +386,27 @@
          age_out = (nCalf )*(1/(365.0*2))
 		 born = (nHeifer_first_dry + nHeifer_second_dry + nHeifer_third_dry + nDry)/(60*0.5)
 		 nCalf = nCalf + born - age_out - calves_death - calves_cull
-                 iCalf = nCalf
-		 
+         iCalf = nCalf
+
 		!Defining 1st lactation heifer pools
          first_lact_death = (nHeifer_first_lact*kMortality)/365
          first_lact_cull = (nHeifer_first_lact*firstCull)/365
          first_age_out = (nHeifer_first_lact/305)
          nHeifer_first_lact = nHeifer_first_lact + age_out - first_age_out - first_lact_cull - first_lact_death
          iHeifer_first_lact = nHeifer_first_lact
-	 
+		 
 		 !Defining 1st dry heifer pools
          first_dry_death = (nHeifer_first_dry*kMortality)/365
          first_dry_cull = (nHeifer_first_dry*firstCull)/365
          first_dry_age_out = (nHeifer_first_dry/60)
          nHeifer_first_dry = nHeifer_first_dry + first_age_out - first_dry_age_out - first_dry_cull - first_dry_death
-         iHeifer_first_dry = nHeifer_first_dry		 
+		 iHeifer_first_dry = nHeifer_first_dry
 		 !Defining 2nd lactation heifer pools
          second_lact_death = (nHeifer_second_lact*kMortality)/365
          second_lact_cull = (nHeifer_second_lact*secondCull)/365
          second_age_out = (nHeifer_second_lact/305)
-	 nHeifer_second_lact = nHeifer_second_lact + first_dry_age_out - second_age_out -second_lact_death-second_lact_cull
-         iHeifer_second_lact = nHeifer_second_lact		 
+		 nHeifer_second_lact = nHeifer_second_lact + first_dry_age_out - second_age_out -second_lact_death-second_lact_cull
+         iHeifer_second_lact = nHeifer_second_lact
 		 
 		 !Defining 2nd dry heifer pools
 	     second_dry_death = (nHeifer_second_dry*kMortality)/365
@@ -422,22 +418,22 @@
 		 third_lact_death = (nHeifer_third_lact*kMortality)/365
          third_lact_cull = (nHeifer_third_lact*thirdCull)/365
          third_age_out = (nHeifer_third_lact/305)
-	 nHeifer_third_lact = nHeifer_third_lact + second_dry_age_out - third_age_out -third_lact_death-third_lact_cull
-	 iHeifer_third_lact = nHeifer_third_lact
-	 
-		 		 
+		 nHeifer_third_lact = nHeifer_third_lact + second_dry_age_out - third_age_out -third_lact_death-third_lact_cull
+         iHeifer_third_lact = nHeifer_third_lact
+		 
+		 
 		 !Defining 3rd dry heifer pools
 		 third_dry_death = (nHeifer_third_dry*kMortality)/365
          third_dry_cull = (nHeifer_third_dry*thirdCull)/365
          third_dry_age_out = (nHeifer_third_dry/60)
          nHeifer_third_dry = nHeifer_third_dry + third_age_out - third_dry_age_out - third_dry_cull - third_dry_death
-	 iHeifer_third_dry = nHeifer_third_dry		 
+		 iHeifer_third_dry = nHeifer_third_dry
 		 
 		 !Defining mature lactation heifer pools
 		 lact_death = (nLact*kMortality)/365
          lact_cull = (nLact*fourthCull)/365
          fourth_age_out = (nLact/305)
-	 nLact = nLact + third_dry_age_out - fourth_age_out -lact_death-lact_cull
+		 nLact = nLact + third_dry_age_out - fourth_age_out -lact_death-lact_cull
          iLact = nLact
 		 !Defining mature dry heifer pools		 
 		 dry_death = (nDry*kMortality)/365
@@ -448,29 +444,26 @@
          nBarn = nHeifer_first_lact + nHeifer_second_lact + nHeifer_third_lact + nLact
 		 nPasture = nCalf + nHeifer_first_dry + nHeifer_second_dry + nHeifer_third_dry + nDry
          end if
-            ! update animal numbers
-         !nHeifer_first_dry = nHeifer_first_lact * (60/365.0)
-         !nHeifer_second_dry = nHeifer_second_lact * (60/365.0)
-         !nHeifer_third_dry = nHeifer_third_lact * (60/365.0)
-         !nHeifer_first_lact = nHeifer_first_lact * (305/365.0)
-         !nHeifer_second_lact = nHeifer_second_lact * (305/365.0)
-         !nHeifer_third_lact = nHeifer_third_lact * (305/365.0)
-         !nDry = nLact * (60/365.0)
-      !nLact = nLact * (305/365.0)
 
-
+!##########################################################################
+!    calculation of    CETI | Current month’s effective temperature index, C  (fox et al 2004)
+!#####################################################################
       CETI = 27.88 - (0.456 * Temp) + (0.010754 * Temp**2)- &
      &  (0.4905 * RHMD) + (0.00088 * RHMD**2)+ (1.1507 * WS) - &
      & (0.126447 * WS**2)+ (0.019876 * Temp * RHMD)- &
      & (0.046313 * Temp * WS)+ (0.4167 * HRS)
-
+!#######################################################################
+! calculation of DMINC |  DMI (DRY MATTER INTAKE) night cooling adjustment, dimensionless
+!#########################################################################
       DMINC = (119.62 - 0.9708 * CETI)/100
+!################################################# DMIF_temp is DMI adjustment factor with night cooling, dimensionless
       if(Temp .ge. 20) then 
         DMIAF_temp = DMINC
       end if 
       if(Temp .lt. 20) then 
         DMIAF_temp = 1.0433 - (0.0044 * Temp) + (0.0001 * Temp**2)
       end if
+!#############################################  NEma is Dietary content of net energy for maintenance (kcal/kg)
       calf_NEma = (1.37 * calf_ME) - (0.138 * calf_ME**2) + (0.0105 * calf_ME**3) - 1.12
       heifer_NEma = (1.37 * heifer_ME) - (0.138 * heifer_ME**2) + (0.0105 * heifer_ME**3) - 1.12
 
@@ -481,28 +474,9 @@
         BI = 1
       end if
 
-      ! calculations of weights 
-  
-      !print *, Porg
-
-
-      !new animal numbers
-   !    born = ((kFreshening*nDry*0.5)+(kFreshening*nHeifer_first_dry*0.5)+ &
-   ! &           (kMature*nCalf*0.5)+ &
-   ! &  (kFreshening*nHeifer_second_dry*0.5)+(kFreshening*nHeifer_third_dry*0.5))*((1-kMortality)/100) 
-   !    new_lact_herd = (kFreshening*nDry)*(100.0-kMortality)/100.0
-   !    new_first_lact = kMature*nCalf*(100.0-kMortality)/100.0
-   !    new_second_lact = kFreshening*nHeifer_first_dry*(100.0-kMortality)/100.0
-   !    new_third_lact = kFreshening*nHeifer_second_dry*(100.0-kMortality)/100.0
-   !    new_first_dry = kDry*nHeifer_first_lact*(100.0-kMortality)/100.0
-   !    new_second_dry = kDry*nHeifer_second_lact*(100.0-kMortality)/100.0
-   !    new_third_dry = kDry*nHeifer_third_lact*(100.0-kMortality)/100.0
-   !    new_dry_herd = kDry*nLact*(100.0-kMortality)/100.0
-   !    new_lact_from_third = kFreshening*nHeifer_third_dry*(100.0-kMortality)/100.0
-   !    culling = (kCull/100.0*nLact)/365.0 
+      ! calculations of weights
       
-	
-      !wt updating
+      !wt updating which is a function of t (time)
       wtLact = dairy_ADG(2500)
       wtDry = dairy_ADG(2500)
       wtCalf = dairy_ADG(365)
@@ -513,7 +487,7 @@
       WTSFD = dairy_ADG(365*3+305)
       WTHTD = dairy_ADG(365*4+305)
       
-      ! cow DMIs
+      ! cow DMIs dry matter intake
       lact_DMI = lactDMI(wtLact)
       calf_DMI = calfDMI(wtCalf)
       heifer_first_lact_DMI = heiferDMI(wtHeifer_first_lact)
@@ -523,8 +497,9 @@
       heifer_second_dry_DMI = heiferDMI(WTSFD)
       heifer_third_dry_DMI = heiferDMI(WTHTD)
       dry_DMI = dryDMI(wtDry)
-
+!##################################################
 	   !N and P produced by 1 
+!##################################################
       N_dry = dryNexc(dry_DMI)
       N_calf = calfNexc(calf_DMI)
       N_heifer_first_dry = heiferNexc(heifer_first_dry_DMI)
@@ -541,13 +516,20 @@
       E = P_heifer_second_dry
       P_heifer_third_dry = dryPexc(heifer_third_dry_DMI, fed_heifer_P)
       F = P_heifer_third_dry
+	  !total N+P produced by dry cows
       NP_dry = N_dry + P_dry
+	  ! total N+P produced by calves
       NP_calf = N_calf + P_calf
+	  !total N+P produced by Heifer first dry cows
       NP_HFD = N_heifer_first_dry + P_heifer_first_dry
+	  !total N+P produced by heifer second dry
       NP_HSD = N_heifer_second_dry + P_heifer_second_dry
+	  ! total N+P produced by heifer third druy cows
       NP_HTD = N_heifer_third_dry + P_heifer_third_dry
-
-      !N and P updates
+!#####################################################
+      !N and P updates for the number of animals multiply by the number of animal in each pool
+!#####################################################
+!###N is just a function of DMI
       lact_N = lactNexc(lact_DMI)*nLact
       dry_N = dryNexc(dry_DMI)*nDry
       calf_N = calfNexc(calf_DMI)*nCalf
@@ -557,6 +539,7 @@
       heifer_first_dry_N = heiferNexc(heifer_first_dry_DMI)*nHeifer_first_dry
       heifer_second_dry_N = heiferNexc(heifer_second_dry_DMI)*nHeifer_second_dry
       heifer_third_dry_N = heiferNexc(heifer_third_dry_DMI)*nHeifer_third_dry
+!! #########P is a fuction of DMI and fed_P	except calves  
       lact_P = cowPexc(lact_DMI,fed_lact_P)*nLact
       dry_P = dryPexc(dry_DMI,fed_dry_P)*nDry
       calf_P = calfPexc(calf_DMI)*nCalf
@@ -566,7 +549,7 @@
       heifer_first_dry_P = dryPexc(heifer_first_dry_DMI, fed_heifer_P)*nHeifer_first_dry
       heifer_second_dry_P = dryPexc(heifer_second_dry_DMI, fed_heifer_P)*nHeifer_second_dry
       heifer_third_dry_P = dryPexc(heifer_third_dry_DMI, fed_heifer_P)*nHeifer_third_dry
-
+!#####################################TOTAL N and P in Barn AND PASTURE
       total_N_barn = lact_N+heifer_first_lact_N+heifer_second_lact_N+ &
      & heifer_third_lact_N
       total_P_barn = lact_P+heifer_first_lact_P+heifer_second_lact_P+ &
@@ -575,10 +558,14 @@
 	 & heifer_third_dry_N
 	 total_P_Past = dry_P + calf_P + heifer_first_dry_P + heifer_second_dry_P + &
 	 & heifer_third_dry_P
+! ################################################# TOTAL N AND P STORED IN THE BARN
       Total_N_barn_stored = Total_N_barn_stored + total_N_barn !total_N_BARN that stored
       Total_P_barn_stored = Total_P_barn_stored + total_P_barn  !total_P_BARN that stored
+!  #################################################
+! ##################TOTAL N AND P DEPOSITED IN THE PASTURE
       Total_N_past_deposited = Total_N_past_deposited + total_N_Past
       Total_P_past_deposited = Total_P_past_deposited + total_P_Past
+!######################################################
       !eghball 2002 
       Pmin = total_P_barn * 0.75 ! grams 
       Porg = total_P_barn * 0.25 ! grams
@@ -588,7 +575,7 @@
       Porg_stored = Total_P_barn_stored * 0.25 !grms
       Pmin_deposited = Total_P_past_deposited * 0.75 !grms
       Porg_deposited = Total_P_past_deposited * 0.25 !grms
-      
+!#########################################################
       ! Van Kessel 2002 
       Nmin = total_N_barn * 0.4 ! grams  
       Norg = total_N_barn * 0.6 ! grams
@@ -598,33 +585,26 @@
       NorgP = total_N_Past * 0.6 ! grams
       Nmin_deposited = Total_N_past_deposited * 0.4 !grms
       Norg_deposited = Total_N_past_deposited * 0.6 !grms
-      ! update animal numbers
-      ! nCalf = nCalf + born - new_first_lact + 1
-      ! nHeifer_first_dry = nHeifer_first_dry + new_first_dry - new_second_lact
-      ! nHeifer_second_dry = nHeifer_second_dry + new_second_dry - new_third_lact
-      ! nHeifer_third_dry = nHeifer_third_dry + new_third_dry - new_lact_from_third
-      ! nHeifer_first_lact = nHeifer_first_lact + new_first_lact - new_first_dry
-      ! nHeifer_second_lact = nHeifer_second_lact + new_second_lact - new_second_dry
-      ! nHeifer_third_lact = nHeifer_third_lact + new_third_lact - new_third_dry
-      ! nLact = nLact + new_lact_herd - culling - new_dry_herd + new_lact_from_third
-      ! nDry = nDry + new_dry_herd - new_lact_herd
-      ! if (nCalf .lt. 0) then
-      !   nCalf = 0
-      ! endif 
+!###########################################################
+!###############################TOTAL N+P FROM STORED MANURE IN BARN 
       TotalNP_barn = (Total_N_barn_stored + Total_P_barn_stored)/1000 !kg
       if (Frt_Man < TotalNP_barn) TotalNP_barn = TotalNP_barn - Frt_Man
-      if (Frt_Man > TotalNP_barn) STOP      
+      if (Frt_Man > TotalNP_barn) STOP
+! ################# TOTAL N+P FROM DEPOSITED MANURE IN PASTURE      
       TotalNP_past = (Total_N_past_deposited + Total_P_past_deposited)/1000 !kg
+! ################### MEAT PRODUCTION Kg
       meat_produced = culling*(wtLact)
+! #################################
       !Get Fractions
-	  Norg_barn = Norg/1000.0
-	  Nmin_barn = Nmin/1000.0
-	  Porg_barn = Porg/1000.0
-	  Pmin_barn = Pmin/1000.0
-	  Norg_past = NorgP/1000.0
-	  Nmin_past = NminP/1000.0
-	  Porg_past = PorgP/1000.0
-	  Pmin_past = PminP/1000.0
+! ##################################
+	  Norg_barn = Norg/1000.0  !Kg
+	  Nmin_barn = Nmin/1000.0  !Kg
+	  Porg_barn = Porg/1000.0  !kg
+	  Pmin_barn = Pmin/1000.0  !kg
+	  Norg_past = NorgP/1000.0 !kg
+	  Nmin_past = NminP/1000.0 !kg
+	  Porg_past = PorgP/1000.0  !kg
+	  Pmin_past = PminP/1000.0  !kg
       Norg_stored_barn = Norg_stored/1000.0 !kg
       Nmin_stored_barn = Nmin_stored/1000.0 !kg
       Porg_stored_barn = Porg_stored/1000.0 !kg
@@ -633,7 +613,7 @@
       Nmin_deopsited_past = Nmin_deposited/1000.0 !kg
       Porg_deposited_past = Porg_deposited/1000.0 !kg
       Pmin_deposited_past = Pmin_deposited/1000.0 !kg
-
+!###################fractions
 	  if (TotalNP_barn .eq. 0) then
 	  
 	        Pmin_frac = 0.
@@ -658,55 +638,46 @@
          NorgP_frac = Norg_deposited_past/TotalNP_past
          NminP_frac = Nmin_deopsited_past/TotalNP_past
       end if
-      total_N_barn = total_N_barn/1000.0
-      total_P_barn = total_P_barn/1000.0
-      total_N_past = total_N_past/1000.0
-      total_P_past = total_P_past/1000.0
+      total_N_barn = total_N_barn/1000.0 !kg
+      total_P_barn = total_P_barn/1000.0  !kg
+      total_N_past = total_N_past/1000.0  !kg
+      total_P_past = total_P_past/1000.0  !kg
 	  
 	  
-
-     !print*,Pmin_frac,Porg_frac,Norg_frac,Nmin_frac
    
 
       write(1798,9008)i,TotalNP_barn,total_N_barn,total_P_barn,total_N_Past, &
      & total_P_Past,Norg_barn,Nmin_barn,Porg_barn,Pmin_barn, &
      & Norg_past,Nmin_past,Porg_past,Pmin_past,Pmin_frac,Porg_frac,&
      & Norg_frac,Nmin_frac 
-	  !manureStore, manure_barn, cumManure, Norg_barn, Nmin_barn, Porg_barn, Pmin_barn, Pmin_frac, Porg_frac, &
-	  !& Norg_frac, Nmin_frac
-	  !manureStore, manure_barn, Norg_barn, Nmin_barn, Porg_barn, Pmin_barn, cumManure, Nmin_frac, Pmin_frac!manureStore, manure_barn, Norg_barn, Nmin_barn, Porg_barn, Pmin_barn, cumManure, Nmin_frac, Pmin_frac, nCalf, &
-	  !divide by 1000 to get kg/d
-        ! print *, Nmin, Norg, Pmin, Porg
-     !end do
-     ! print *,nDay, Porg,Nmin,Pmin,cumManure,manureStore
-       !!nDay = nDay + 1
-!             if (nBroilers .gt. 0) wtBroilers=(wtBroilers+ADG*nBroilers)
-!             if (nChicks .gt. 0) wtChicks = (wtChicks + ADG*nChicks)
+
 	  return 
 9008     format(i4,1x,17f15.3)
 
       ! subroutines 
       contains
-            function dairy_ADG(t) result(BW)
+! #####  BW function 
+            function dairy_ADG(i) result(BW)
                 implicit none
-                integer, intent(in) :: t
+                integer, intent(in) :: i
                 real :: BW, A, k, b, M
                 A = 619 !asymptotic weight, kg
                 k = 0.0020 !Rate parameter
                 b = 0.905 ! integration constant
                 M = 1.2386 ! inflection parameter
-                BW = A*(1-(b*exp(-k*t)))**M
+                BW = A*(1-(b*exp(-k*i)))**M
                 return 
             end function dairy_ADG
+! ######### DMI dry matter intak function for calf
             function calfDMI(BW) result(DMI)
                   implicit none
                   real, intent(in) :: BW
                   real :: DMI, SBW
-                  SBW = 0.94*BW
+                  SBW = 0.94*BW !SHRUNK BODY WEIGHT
                   DMI = (SBW**0.75)*(((0.2435*calf_NEma)-(0.0466*calf_NEma**2)-0.1128)/calf_NEma)*DMIAF_temp*BI
                   return
             end function calfDMI
-
+! ############DMI function for heifers
             function heiferDMI(BW) result(DMI)
                   implicit none
                   real, intent(in) :: BW
@@ -715,7 +686,7 @@
                   DMI = (SBW**0.75)*(((0.2435*calf_NEma)-(0.0466*calf_NEma**2)-0.0869)/heifer_NEma)*DMIAF_temp*BI
                   return
             end function heiferDMI
-
+! #############DMI function for lact
             function lactDMI(BW) result(DMI)
                   implicit none
                   real, intent(in) :: BW
@@ -724,7 +695,7 @@
                   DMI = ((0.0185 * BW) + (0.305 * FCM))*DMIAF_temp*BI
                   return
             end function lactDMI
-
+!  ################ DMI for dry cows
             function dryDMI(BW) result(DMI)
                   implicit none
                   real, intent(in) :: BW
@@ -733,9 +704,9 @@
                   DMI = (0.0185 * SBW)*DMIAF_temp*BI
                   return
             end function dryDMI
-
+!##################################################
             ! Nitrogen Equations per cow
-
+! ###################################################
             function heiferNexc(DMI) result(Nexc)
                   implicit none
                   real, intent(in) :: DMI
@@ -767,34 +738,24 @@
                   Nexc = ((((dry_CP/100)*(DMI*1000))/(DMI*1000)*DMI)*78.39+51.4)
                   return
             end function dryNexc
-
+!#####################################################
             ! Phosphorus Equations
-
+!######################################################
+! ####calf
             function calfPexc(DMI) result(Pexc)
                   real, intent(in) :: DMI
                   real :: Pexc
                   Pexc = ((((fed_calf_P/100)*(DMI*1000))/(DMI*1000)*DMI)*622.03)
                   return
             end function calfPexc
-
-           !  function cowPexc(DMI, wtCow, fed_P) result(Pexc)
-           !        real, intent(in) :: DMI, wtCow, fed_P
-           !        real :: Pexc
-           !        DIM = 305/2.0
-           !        Pexc = ((DMI*fed_P)-(2*(wtCow)/1000)-0.02743* &
-           ! &            exp(((0.05527-0.000075*DIM)*DIM))- &
-           ! &            0.02743*exp(((0.05527-0.000075*(DIM-1))*(DIM-1)))* &
-           ! &            (1.2+4.635*MW**(0.22)*(wtCow)**(-0.22))*ADG/0.96)
-           !        return
-           !  end function cowPexc
-           !Nennich 2005 
+ ! ### heifer and lact 
            function cowPexc(DMI, fed_P) result(Pexc)
                   real, intent(in) :: DMI, fed_P
                   real :: Pexc
                   Pexc = 7.5 + ((((fed_P/100)*(DMI*1000))/(DMI*1000)*DMI)*560.7+2.1 )
                   return
             end function cowPexc
-            
+   ! ###### dry          
             function dryPexc(DMI, fed_P) result(Pexc)
                   real, intent(in) :: DMI, fed_P
                   real :: Pexc
