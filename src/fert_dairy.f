@@ -27,13 +27,13 @@
 !!                                 |in HRU on day
 !!    fertp         |kg P/ha       |total amount of phosphorus applied to soil
 !!                                 |in HRU on day
-!!    fminn(:)      |kg minN/kg frt|fraction of fertilizer that is mineral N
+!!    Nmin_frac=fminn(:)      |kg minN/kg frt|fraction of fertilizer that is mineral N
 !!                                 |(NO3 + NH4)
-!!    fminp(:)      |kg minP/kg frt|fraction of fertilizer that is mineral P
+!!   Pmin_frac=fminp(:)      |kg minP/kg frt|fraction of fertilizer that is mineral P
 !!    fnh3n(:)      |kgNH3-N/kgminN|fraction of mineral N in fertilizer that
 !!                                 |is NH3-N
-!!    forgn(:)      |kg orgN/kg frt|fraction of fertilizer that is organic N
-!!    forgp(:)      |kg orgP/kg frt|fraction of fertilizer that is organic P
+!!   Norg_frac=forgn(:)      |kg orgN/kg frt|fraction of fertilizer that is organic N
+!!   Porg_frac=forgp(:)      |kg orgP/kg frt|fraction of fertilizer that is organic P
 !!    frt_kg        |kg/ha         |amount of fertilizer applied to HRU
 !!    frt_surface   |none          |fraction of fertilizer which is applied to
 !!                                 |the top 10 mm of soil (the remaining
