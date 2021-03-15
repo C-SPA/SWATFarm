@@ -27,13 +27,13 @@
 !!    bio_trmp(:)  |(kg/ha)/day   |dry weight of biomass removed by
 !!                                |trampling daily
 !!    curyr        |none          |current year of simulation
-!!    fminn(:)     |kg minN/kg frt|fraction of mineral N (NO3 + NH3) in 
+!!    NminP_frac=fminn(:)     |kg minN/kg frt|fraction of mineral N (NO3 + NH3) in 
 !!                                |fertilizer/manure
-!!    fminp(:)     |kg minP/kg frt|fraction of mineral P in fertilizer/manure
+!!    PminP_frac=fminp(:)     |kg minP/kg frt|fraction of mineral P in fertilizer/manure
 !!    fnh3n(:)     |kg NH3-N/kg minN|fraction of NH3-N in mineral N in 
 !!                                |fertilizer/manure
-!!    forgn(:)     |kg orgN/kg frt|fraction of organic N in fertilizer/manure
-!!    forgp(:)     |kg orgP/kg frt|fraction of organic P in fertilizer/manure
+!!    NorgP_frac=forgn(:)     |kg orgN/kg frt|fraction of organic N in fertilizer/manure
+!!    PorgP_frac=forgp(:)     |kg orgP/kg frt|fraction of organic P in fertilizer/manure
 !!    grazn        |kg N/ha       |total amount of nitrogen applied to soil
 !!                                |during grazing in HRU on day
 !!    grazp        |kg P/ha       |total amount of phosphorus applied to soil
@@ -75,7 +75,7 @@
 !!                                |classified as residue
 !!    sol_solp(:,:)|kg P/ha       |amount of phosohorus stored in solution
 !!    sol_z(:,:)   |mm            |depth to bottom of soil layer
-!!    manure_kg(:) |(kg/ha)/day   |dry weight of manure deposited on HRU
+!!    manure_kg(:)=(num_calf(j)*NP_calf)+(num_HFD(j)*NP_HFD)+(num_HSD(j)*NP_HSD)+(num_HTD(j)*NP_HTD)+ (num_dry(j)*NP_dry) |(kg/ha)/day   |dry weight of manure deposited on HRU
 !!                                |daily
 !!    num_calf(:)                 |Number of calf in Pasture per ha daily
 !!    num_HFD (:)                |
